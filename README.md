@@ -5,14 +5,3 @@
 **Descripción**: Esta base de datos cuenta con diferentes registros sobre los aportes energéticos de diferentes fuentes hídricas del país al Sistema Interconectado Nacional. Fue necesario realizar diferentes concatenaciones de varias bases de datos, a conitnuación se presenta la descripción de este proceso
 
 _Fuente_: [Enlace a la base de datos](https://www.datos.gov.co/dataset/Aportes-Hidr-ulicos-Energ-a/wa2n-56u4/about_data)
-
-# Section Heading
-
-Some body text of this section.
-
-<a name="my-custom-anchor-point"></a>
-Some text I want to provide a direct link to, but which doesn't have its own heading.
-
-(… more content…)
-
-[A link to that custom anchor](#my-custom-anchor-point)

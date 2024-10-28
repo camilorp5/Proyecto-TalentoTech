@@ -7,13 +7,13 @@ import seaborn as sns
 base_of = pd.read_csv("BD_oficial.csv")
 
 # Crear pestañas
-tab1, tab2, tab3, tab4, tab5= st.tabs(["Descripción", "Base de datos", "Limpieza", "Visualización por región", "Visualización por tiempo"])
+tab1, tab2, tab3, tab4, tab5, tab6= st.tabs(["Descripción", "Base de datos", "Limpieza", "Visualización por región", "Visualización por tiempo", "Visualización por cobertura"])
 
 
 # Contenido de la primera pestaña
 with tab1: 
     st.title("Proyecto Grupo 2")
-    st.markdown(f'''**Breve descripción:** Dada la gran relevancia de las energías renovables 
+    st.markdown(f'''**Introducción:** Dada la gran relevancia de las energías renovables 
                 a nivel mundial, Colombia se ha encamindo a construir una relación directa con la energía hídrica,
                 base importante del sistema energético nacional.  Este proyecto tiene como principal objetivo analizar 
                 el aporte energético de algunas fuentes hídricas ubicadas en  diferentes regiones del país entre el año 
@@ -55,11 +55,8 @@ with tab2:
     st.subheader("Exploración")
     st.text("Haciendo uso de la estadística descriptiva realizaremos una exploración\ninicial del Dataset")
     st.markdown(f"La cantidad total de registros es: `{len(base_of)}`")
-    st.markdown(f"La cantidad total de columnas es: ``")
     st.code("base_of.describe()")
     st.write(base_of.describe())
-    st.code("base_of.info()")
-    st.dataframe(base_of.info())
     st.markdown(f"A continuación brindamos información útil sobre las columnas de nuestro Dataset")
     df_info = pd.DataFrame({
         "Columnas":["FechaPublicacion", "Fecha", "CodigoDuracion", "CodigoSerieHidrologica", "RegionHidrologica", "AportesHidricosEnergia", "PromedioAcumuladoEnergia", "MediaHistoricaEnergia", "AportesHidricosEnergiaPSS95"],
@@ -123,33 +120,11 @@ with tab4:
     conteo_regiones = df_conteo['RegionHidrologica'].value_counts()
     st.write(conteo_regiones)
     st.bar_chart(conteo_regiones, x_label="Regiones", y_label="Conteo")
-
-
-    ## Graficar mapa
+    
     df_fuentes = pd.read_csv("FuentesHidricas.csv")
     df_group = base_of[["CodigoSerieHidrologica","AportesHidricosEnergia","PromedioAcumuladoEnergia","MediaHistoricaEnergia","AportesHidricosEnergiaPSS95"]].groupby("CodigoSerieHidrologica").mean().loc[:, "AportesHidricosEnergia": "AportesHidricosEnergiaPSS95"]
-    st.markdown('''Además podemos analizar el aporte por fuente hidrologica y realizar una comparación visual en el mapa de Colombia
-                Primero agrupamos los datos por la columna "CodigoSerieHidrologica" así:''')
-    st.write(df_group)
     df_join = df_group.join(df_fuentes.set_index('CodigoSerieHidrologica'), on='CodigoSerieHidrologica')
-    st.markdown('''Luego, a través de un análisis detallado hemos creado el siguiente Dataset dónde se encuentra
-                la locación en latitudes y longitudes de cada Fuente Hídrica asociada a un Códio de Serie''')
-    
-    ver_df = st.toggle('Ver DataFrame (fuentes)', value=False)
-    if ver_df:
-        st.write(df_fuentes)
-
-    ver_df_dos = st.toggle('Ver DataFrame (join)', value=False)
-    if ver_df_dos:
-        st.write(df_join)
-    
     df_total=df_join[["FuentesHidricas","AportesHidricosEnergia","Latitud","Longitud"]]
-    df_total["size"]=(df_join["AportesHidricosEnergia"]/1000)+100
-    st.write(df_total)
-
-    with st.container(border=True):
-        st.header("Mapa Aporte por Fuente")
-        st.map(df_total, latitude='Latitud', longitude='Longitud', size= "size")
 
     ## Gráfico Aportes por Fuente Hídrica
     base_departamentos = base_of[["CodigoSerieHidrologica","RegionHidrologica"]]
@@ -225,3 +200,30 @@ with tab5:
     ax4.set_xlabel("Fecha")
     ax4.set_ylabel("Aportes Hídricos (kWh)")
     st.pyplot(fig4)
+
+with tab6:
+    ## Graficar mapa
+    df_fuentes = pd.read_csv("FuentesHidricas.csv")
+    df_group = base_of[["CodigoSerieHidrologica","AportesHidricosEnergia","PromedioAcumuladoEnergia","MediaHistoricaEnergia","AportesHidricosEnergiaPSS95"]].groupby("CodigoSerieHidrologica").mean().loc[:, "AportesHidricosEnergia": "AportesHidricosEnergiaPSS95"]
+    st.markdown('''Además podemos analizar el aporte por fuente hidrologica y realizar una comparación visual en el mapa de Colombia
+                Primero agrupamos los datos por la columna "CodigoSerieHidrologica" así:''')
+    st.write(df_group)
+    df_join = df_group.join(df_fuentes.set_index('CodigoSerieHidrologica'), on='CodigoSerieHidrologica')
+    st.markdown('''Luego, a través de un análisis detallado hemos creado el siguiente Dataset dónde se encuentra
+                la locación en latitudes y longitudes de cada Fuente Hídrica asociada a un Códio de Serie''')
+    
+    ver_df = st.toggle('Ver DataFrame (fuentes)', value=False)
+    if ver_df:
+        st.write(df_fuentes)
+
+    ver_df_dos = st.toggle('Ver DataFrame (join)', value=False)
+    if ver_df_dos:
+        st.write(df_join)
+    
+    df_total=df_join[["FuentesHidricas","AportesHidricosEnergia","Latitud","Longitud"]]
+    df_total["size"]=(df_join["AportesHidricosEnergia"]/1000)+100
+    st.write(df_total)
+
+    with st.container(border=True):
+        st.header("Mapa Aporte por Fuente")
+        st.map(df_total, latitude='Latitud', longitude='Longitud', size= "size")

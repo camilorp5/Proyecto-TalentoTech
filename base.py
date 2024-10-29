@@ -5,6 +5,7 @@ import streamlit as st
 import seaborn as sns
 
 base_of = pd.read_csv("BD_oficial.csv")
+st.set_page_config(page_title="Proyecto Grupo 2")
 
 # Crear pestañas
 tab1, tab2, tab3, tab4, tab5, tab6= st.tabs(["Descripción", "Base de datos", "Limpieza", "Visualización por región", "Visualización por tiempo", "Visualización por cobertura"])
@@ -17,7 +18,16 @@ with tab1:
                 a nivel mundial, Colombia se ha encamindo a construir una relación directa con la energía hídrica,
                 base importante del sistema energético nacional.  Este proyecto tiene como principal objetivo analizar 
                 el aporte energético de algunas fuentes hídricas ubicadas en  diferentes regiones del país entre el año 
-                2019 al 2024. \nDocumentación oficial del proyecto en este [enlace](https://docs.google.com/document/d/1n6q818P3u3SP_zAPgCsf90acUZrU_f-vM8FBaTLnppo/edit?usp=sharing)
+                2019 al 2024.''')
+    st.markdown('''**Integrantes**: 
+                \n- Camilo Rafael Pérez Chaves
+                \n- Maria Isabel Cañola García
+                \n- Juan Sebastián Sanchez Chaparro
+                ''')
+    st.markdown('''**Enlaces importantes**: 
+                \n- [Github del proyecto](https://github.com/camilorp5/Proyecto-TalentoTech)
+                \n- [Documento de investigación](https://drive.google.com/file/d/1Qhr5prdV3yorYa9C3tSMMMd8pw-3uLlz/view?usp=sharing)
+                \n- [Base de datos](https://www.datos.gov.co/dataset/Aportes-Hidr-ulicos-Energ-a/wa2n-56u4/about_data)
                 ''')
 
 # Contenido de la segunda pestaña
@@ -47,7 +57,7 @@ with tab2:
     st.markdown("""El proceso de concatenación de bases de datos tuvo cómo base los siguientes pasos:
                 \n1. **Escogencia de los datos:** Para obtener una buena visualización de los datos, y lograr el análisis adecuado de estos, hemos escogido los días primero de cada mes a lo largo de los años 2019 al 2024.
                 \n2. **Descarga:** Se ha escogido una fuente de Datos Abiertos, sin embargo, fue necesario descargar cada dia en un csv por separado. Fuente: https://www.simem.co/datadetail/2bff145f-a233-4644-b5eb-74188dfba51c
-                \n3. **Concatenación:** Realizamos una concatenación anual y luego otra sobre las bases de datos de cada año (para evitar sobrecarga del collab omitimos la primera concatenación).
+                \n3. **Concatenación:** Realizamos una concatenación anual y luego otra sobre las bases de datos de cada año (para detallar este proceso consultar el collab adjunto).
                 \n4. **Continuación:** Posteriormente procedemos a hacer uso de funciones de estadística descriptiva, limpieza y visualización de los datos.""")
 
     st.code(codigo)
@@ -95,7 +105,7 @@ with tab3:
 # Contenido de la cuarta pestaña
 with tab4:
 
-    st.header("Visualización por región")
+    st.subheader("Visualización por región")
     st.markdown('''Podriamos empezar comparando la suma total de aportes hídricos que ha hecho cada región hidrológica
                 entre los años de estudio (2017-2024)''')
     
@@ -105,15 +115,8 @@ with tab4:
     ax1.set_title("Aportes Hídricos por Región Hidrológica")
     st.pyplot(fig1)
 
-    st.markdown('''Notemos la diferencia entre los aportes totales realizados al promedio de aportes realizados
-                por región hidrológica.''')
-    
-    df_region = base_of.iloc[:, [4, 5, 6, 7, 8]].groupby("RegionHidrologica").mean().loc[:, "AportesHidricosEnergia": "AportesHidricosEnergiaPSS95"]
-    st.write(df_region)
-    st.bar_chart(df_region["AportesHidricosEnergia"])
-
-    st.markdown('''Esta diferencia se puede presentar por la cantidad de registros existentes por Región. Para
-                poder comprobar esto realizamos un conteo ''')
+    st.markdown('''Además podemos realizar un conteo del total de registros en nuestro dataframe agrupados por regiones.
+    Esto nos da un indicio sobre cuál Región Hídrica cuenta con mayor cantidad de fuentes hídricas. ''')
     
 
     df_conteo = base_of[["RegionHidrologica", "AportesHidricosEnergia"]]
@@ -201,6 +204,10 @@ with tab5:
     ax4.set_ylabel("Aportes Hídricos (kWh)")
     st.pyplot(fig4)
 
+    st.markdown('''Invitamos al lector a realizar un filtrado entre el año 2023 y la fecha actual. Con base a esta información,
+    determinar si existe una relación en las afectaciones del Fenónomeno del Niño en la policrisis del siglo 21 y
+    la cantidad total de aportes hídricos en este lapsus de tiempo.
+    \nPara acceder a más información leer el siguiente artículo: [Gestión del agua en Colombia en la policrisis del siglo 21](https://www.sur.org.co/gestion-del-agua-en-colombia-en-la-policrisis-del-siglo-21-factor-fundamental-de-la-riqueza-territorial-sustentable/)''')
 with tab6:
     ## Graficar mapa
     df_fuentes = pd.read_csv("FuentesHidricas.csv")
@@ -214,10 +221,14 @@ with tab6:
     
     ver_df = st.toggle('Ver DataFrame (fuentes)', value=False)
     if ver_df:
+        st.markdown('''A partir de la información encontrada en la web (consultar bibliografía en la documentación oficial del proyecto), 
+        hemos construido la siguiente base de datos. Esta cuenta con el nombre de cada fuente hídrica, su ubicación (latitudes y
+        longitudes) y su respectivo Codio de serie Hidrológica. Información fundamental para realizar el gráfico a continuación.''')
         st.write(df_fuentes)
 
     ver_df_dos = st.toggle('Ver DataFrame (join)', value=False)
     if ver_df_dos:
+        st.markdown('''Utilizando el dataframe anterior (FuentesHidricas) realizamos un join con el dataframe inicial y obtuvimos lo siguiente''')
         st.write(df_join)
     
     df_total=df_join[["FuentesHidricas","AportesHidricosEnergia","Latitud","Longitud"]]

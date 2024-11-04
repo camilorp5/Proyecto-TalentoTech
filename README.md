@@ -6,12 +6,12 @@
 
 ## Bases de datos
 - BD_oficial
-\n**Descripción**: Esta base de datos cuenta con diferentes registros sobre los aportes energéticos de diferentes fuentes hídricas del país al Sistema Interconectado Nacional. Fue necesario realizar diferentes concatenaciones de varias bases de datos, a conitnuación se presenta la descripción de este proceso
+**Descripción**: Esta base de datos cuenta con diferentes registros sobre los aportes energéticos de diferentes fuentes hídricas del país al Sistema Interconectado Nacional. Fue necesario realizar diferentes concatenaciones de varias bases de datos, a conitnuación se presenta la descripción de este proceso
 
 _Fuente_: [Enlace a la base de datos](https://www.datos.gov.co/dataset/Aportes-Hidr-ulicos-Energ-a/wa2n-56u4/about_data)
 
 - FuentesHidricas
-\n**Descripción**: Esta base de datos cuenta con la ubicación en latitud y longitud de cada uno de las fuentes hídricas y su respectivos código de serie. Esta fue construída a partir de diferentes estudios y comparaciones entre los datos presentados.
+**Descripción**: Esta base de datos cuenta con la ubicación en latitud y longitud de cada uno de las fuentes hídricas y su respectivos código de serie. Esta fue construída a partir de diferentes estudios y comparaciones entre los datos presentados.
 
 ## Código fuente
 - base.py: Código fuente para la visualización realizada en Streamlit.
